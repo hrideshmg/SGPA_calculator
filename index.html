@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SGPA Calculator (For CSE S3)</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h1 {
+        margin-bottom: 10px;
+      }
+      table {
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 600px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background: #f2f2f2;
+      }
+      select {
+        width: 100%;
+        padding: 4px;
+      }
+      button {
+        padding: 8px 16px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      #result {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SGPA Calculator (For CSE S3)</h1>
+
+    <!-- Table of courses (preset) -->
+    <table>
+      <thead>
+        <tr>
+          <th>Course Name</th>
+          <th>Credits</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Strategic Lessons from Mahabharata</td>
+          <td>1</td>
+          <td>
+            <select id="grade1">
+              <option value="10">O</option>
+              <option value="9.5">A+</option>
+              <option value="9">A</option>
+              <option value="8">B+</option>
+              <option value="7">B</option>
+              <option value="6">C</option>
+              <option value="5">P</option>
+              <option value="0">F</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Procedural Programming using C</td>
+          <td>4</td>
+          <td>
+            <select id="grade2">
+              <option value="10">O</option>
+              <option value="9.5">A+</option>
+              <option value="9">A</option>
+              <option value="8">B+</option>
+              <option value="7">B</option>
+              <option value="6">C</option>
+              <option value="5">P</option>
+              <option value="0">F</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Database Management Systems</td>
+          <td>4</td>
+          <td>
+            <select id="grade3">
+              <option value="10">O</option>
+              <option value="9.5">A+</option>
+              <option value="9">A</option>
+              <option value="8">B+</option>
+              <option value="7">B</option>
+              <option value="6">C</option>
+              <option value="5">P</option>
+              <option value="0">F</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Data Structures and Algorithms</td>
+          <td>5</td>
+          <td>
+            <select id="grade4">
+              <option value="10">O</option>
+              <option value="9.5">A+</option>
+              <option value="9">A</option>
+              <option value="8">B+</option>
+              <option value="7">B</option>
+              <option value="6">C</option>
+              <option value="5">P</option>
+              <option value="0">F</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Digital Electronics</td>
+          <td>3</td>
+          <td>
+            <select id="grade5">
+              <option value="10">O</option>
+              <option value="9.5">A+</option>
+              <option value="9">A</option>
+              <option value="8">B+</option>
+              <option value="7">B</option>
+              <option value="6">C</option>
+              <option value="5">P</option>
+              <option value="0">F</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Digital Electronics Laboratory</td>
+          <td>1</td>
+          <td>
+            <select id="grade6">
+              <option value="10">O</option>
+              <option value="9.5">A+</option>
+              <option value="9">A</option>
+              <option value="8">B+</option>
+              <option value="7">B</option>
+              <option value="6">C</option>
+              <option value="5">P</option>
+              <option value="0">F</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Optimization Techniques</td>
+          <td>2</td>
+          <td>
+            <select id="grade7">
+              <option value="10">O</option>
+              <option value="9.5">A+</option>
+              <option value="9">A</option>
+              <option value="8">B+</option>
+              <option value="7">B</option>
+              <option value="6">C</option>
+              <option value="5">P</option>
+              <option value="0">F</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Calculate button -->
+    <button onclick="calculateSGPA()">Calculate SGPA</button>
+
+    <p>Your SGPA is: <span id="result">-</span></p>
+
+    <script>
+      function calculateSGPA() {
+        // Credits array matching the courses in the same order
+        const credits = [1, 4, 4, 5, 3, 1, 4];
+        let totalCredits = 0;
+        let totalPoints = 0;
+
+        // Loop through each course
+        for (let i = 0; i < credits.length; i++) {
+          const gradeSelect = document.getElementById("grade" + (i + 1));
+          console.log(gradeSelect);
+          const gradeValue = parseFloat(gradeSelect.value); // e.g., 10, 9.5, etc.
+
+          totalPoints += gradeValue * credits[i];
+          totalCredits += credits[i];
+        }
+
+        // Compute SGPA = total (grade points * credits) / total credits
+        const sgpa = totalPoints / totalCredits;
+        document.getElementById("result").textContent = sgpa.toFixed(2);
+      }
+    </script>
+  </body>
+</html>
