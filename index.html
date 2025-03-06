@@ -168,12 +168,28 @@
       </tbody>
     </table>
 
-    <!-- Calculate button -->
     <button onclick="calculateSGPA()">Calculate SGPA</button>
 
     <p>Your SGPA is: <span id="result">-</span></p>
 
+    <p>
+      Made with &#128153; by
+      <a href="https://github.com/hrideshmg">Hridesh MG</a>
+    </p>
+    <p style="display: flex; align-items: center; gap: 8px">
+      Take a peek at the source code at
+      <a href="https://github.com/hrideshmg/SGPA_calculator" target="_blank">
+        <img
+          src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          width="30"
+          alt="GitHub"
+        />
+      </a>
+    </p>
+
     <script>
+      // Digging through the source code? Good Luck :)
+
       function calculateSGPA() {
         // Credits array matching the courses in the same order
         const credits = [1, 4, 4, 5, 3, 1, 4];
