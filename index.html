@@ -2,20 +2,23 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>SGPA Calculator (For CSE S3)</title>
+    <title>SGPA Calculator with Presets</title>
     <style>
       body {
         font-family: Arial, sans-serif;
         margin: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
       }
       h1 {
         margin-bottom: 10px;
+        color: #333;
       }
       table {
         border-collapse: collapse;
         margin-bottom: 20px;
         width: 100%;
-        max-width: 600px;
       }
       th,
       td {
@@ -34,166 +37,362 @@
         padding: 8px 16px;
         font-size: 1rem;
         cursor: pointer;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+      button:hover {
+        background-color: #45a049;
       }
       #result {
         font-weight: bold;
+        font-size: 1.2rem;
+        color: #333;
+      }
+      .preset-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+      }
+      .preset-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      .preset-controls select {
+        flex-grow: 1;
+        max-width: 300px;
+      }
+      #customPresetName {
+        padding: 8px;
+        width: 250px;
+      }
+      .action-buttons {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
       }
     </style>
   </head>
   <body>
-    <h1>SGPA Calculator (For CSE S3)</h1>
+    <h1>SGPA Calculator with Presets</h1>
 
-    <!-- Table of courses (preset) -->
-    <table>
+    <div class="preset-section">
+      <h2>Semester Presets</h2>
+      <div class="preset-controls">
+        <label for="presetSelect">Select Semester: </label>
+        <select id="presetSelect" onchange="loadPreset()">
+          <option value="">-- Select a preset --</option>
+          <option value="cse_s3">CSE Semester 3</option>
+          <option value="cse_s4">CSE Semester 4</option>
+          <option value="custom">Custom Presets</option>
+        </select>
+
+        <div id="customPresetControls" style="display: none">
+          <select id="savedPresetsSelect" onchange="loadSavedPreset()">
+            <option value="">-- Select saved preset --</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="savePresetControls" style="display: none">
+        <input
+          type="text"
+          id="customPresetName"
+          placeholder="Enter preset name"
+        />
+        <button onclick="saveCurrentAsPreset()">Save Current as Preset</button>
+      </div>
+    </div>
+
+    <!-- Table of courses -->
+    <table id="coursesTable">
       <thead>
         <tr>
           <th>Course Name</th>
           <th>Credits</th>
           <th>Grade</th>
+          <th>Action</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>Strategic Lessons from Mahabharata</td>
-          <td>1</td>
-          <td>
-            <select id="grade1">
-              <option value="10">O</option>
-              <option value="9.5">A+</option>
-              <option value="9">A</option>
-              <option value="8">B+</option>
-              <option value="7">B</option>
-              <option value="6">C</option>
-              <option value="5">P</option>
-              <option value="0">F</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Procedural Programming using C</td>
-          <td>4</td>
-          <td>
-            <select id="grade2">
-              <option value="10">O</option>
-              <option value="9.5">A+</option>
-              <option value="9">A</option>
-              <option value="8">B+</option>
-              <option value="7">B</option>
-              <option value="6">C</option>
-              <option value="5">P</option>
-              <option value="0">F</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Database Management Systems</td>
-          <td>4</td>
-          <td>
-            <select id="grade3">
-              <option value="10">O</option>
-              <option value="9.5">A+</option>
-              <option value="9">A</option>
-              <option value="8">B+</option>
-              <option value="7">B</option>
-              <option value="6">C</option>
-              <option value="5">P</option>
-              <option value="0">F</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Data Structures and Algorithms</td>
-          <td>5</td>
-          <td>
-            <select id="grade4">
-              <option value="10">O</option>
-              <option value="9.5">A+</option>
-              <option value="9">A</option>
-              <option value="8">B+</option>
-              <option value="7">B</option>
-              <option value="6">C</option>
-              <option value="5">P</option>
-              <option value="0">F</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Digital Electronics</td>
-          <td>3</td>
-          <td>
-            <select id="grade5">
-              <option value="10">O</option>
-              <option value="9.5">A+</option>
-              <option value="9">A</option>
-              <option value="8">B+</option>
-              <option value="7">B</option>
-              <option value="6">C</option>
-              <option value="5">P</option>
-              <option value="0">F</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Digital Electronics Laboratory</td>
-          <td>1</td>
-          <td>
-            <select id="grade6">
-              <option value="10">O</option>
-              <option value="9.5">A+</option>
-              <option value="9">A</option>
-              <option value="8">B+</option>
-              <option value="7">B</option>
-              <option value="6">C</option>
-              <option value="5">P</option>
-              <option value="0">F</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Optimization Techniques</td>
-          <td>2</td>
-          <td>
-            <select id="grade7">
-              <option value="10">O</option>
-              <option value="9.5">A+</option>
-              <option value="9">A</option>
-              <option value="8">B+</option>
-              <option value="7">B</option>
-              <option value="6">C</option>
-              <option value="5">P</option>
-              <option value="0">F</option>
-            </select>
-          </td>
-        </tr>
+      <tbody id="coursesBody">
+        <!-- Courses will be loaded here -->
       </tbody>
     </table>
 
-    <!-- Calculate button -->
-    <button onclick="calculateSGPA()">Calculate SGPA</button>
+    <div class="action-buttons">
+      <button onclick="addCourse()">Add Course</button>
+      <button onclick="calculateSGPA()">Calculate SGPA</button>
+    </div>
 
     <p>Your SGPA is: <span id="result">-</span></p>
 
     <script>
+      // Predefined presets
+      const presets = {
+        cse_s3: {
+          name: "CSE Semester 3",
+          courses: [
+            { name: "Strategic Lessons from Mahabharata", credits: 1 },
+            { name: "Procedural Programming using C", credits: 4 },
+            { name: "Database Management Systems", credits: 4 },
+            { name: "Data Structures and Algorithms", credits: 5 },
+            { name: "Digital Electronics", credits: 3 },
+            { name: "Digital Electronics Laboratory", credits: 1 },
+            { name: "Optimization Techniques", credits: 2 },
+          ],
+        },
+        cse_s4: {
+          name: "CSE Semester 4",
+          courses: [
+            { name: "Professional Communication", credits: 1 },
+            { name: "Object Oriented Programming", credits: 4 },
+            { name: "Operating Systems", credits: 4 },
+            { name: "Computer Organization", credits: 3 },
+            { name: "Discrete Mathematics for CSE", credits: 4 },
+            { name: "Computer Organization Laboratory", credits: 1 },
+            { name: "Object Oriented Programming Laboratory", credits: 1 },
+          ],
+        },
+      };
+
+      // Initialize custom presets from localStorage
+      let customPresets = {};
+
+      // Load presets from localStorage if available
+      function initCustomPresets() {
+        const savedPresets = localStorage.getItem("sgpaCustomPresets");
+        if (savedPresets) {
+          customPresets = JSON.parse(savedPresets);
+          updateCustomPresetDropdown();
+        }
+      }
+
+      // Update the custom preset dropdown
+      function updateCustomPresetDropdown() {
+        const dropdown = document.getElementById("savedPresetsSelect");
+
+        // Clear current options (except the first one)
+        while (dropdown.options.length > 1) {
+          dropdown.remove(1);
+        }
+
+        // Add custom presets to dropdown
+        for (const key in customPresets) {
+          const option = document.createElement("option");
+          option.value = key;
+          option.textContent = customPresets[key].name;
+          dropdown.appendChild(option);
+        }
+      }
+
+      // Load selected preset
+      function loadPreset() {
+        const presetSelect = document.getElementById("presetSelect");
+        const selectedPreset = presetSelect.value;
+        const customControls = document.getElementById("customPresetControls");
+        const saveControls = document.getElementById("savePresetControls");
+
+        // Show/hide custom preset controls
+        if (selectedPreset === "custom") {
+          customControls.style.display = "block";
+          saveControls.style.display = "block";
+          return; // Don't load anything yet
+        } else {
+          customControls.style.display = "none";
+          saveControls.style.display = "block"; // Always show save controls
+        }
+
+        if (!selectedPreset) {
+          return; // Nothing selected
+        }
+
+        // Load the selected preset
+        const preset = presets[selectedPreset];
+        if (preset) {
+          loadCoursesFromPreset(preset);
+        }
+      }
+
+      // Load saved custom preset
+      function loadSavedPreset() {
+        const savedPresetsSelect =
+          document.getElementById("savedPresetsSelect");
+        const selectedKey = savedPresetsSelect.value;
+
+        if (!selectedKey) return;
+
+        const preset = customPresets[selectedKey];
+        if (preset) {
+          loadCoursesFromPreset(preset);
+        }
+      }
+
+      // Load courses from a preset object
+      function loadCoursesFromPreset(preset) {
+        const coursesBody = document.getElementById("coursesBody");
+        coursesBody.innerHTML = "";
+
+        preset.courses.forEach((course, index) => {
+          addCourseRow(course.name, course.credits);
+        });
+      }
+
+      // Save current configuration as a custom preset
+      function saveCurrentAsPreset() {
+        const presetName = document.getElementById("customPresetName").value;
+        if (!presetName) {
+          alert("Please enter a name for your preset");
+          return;
+        }
+
+        // Create a preset from current courses
+        const courses = [];
+        const rows = document.getElementById("coursesBody").rows;
+
+        for (let i = 0; i < rows.length; i++) {
+          const nameCell = rows[i].cells[0].querySelector("input");
+          const creditsCell = rows[i].cells[1].querySelector("input");
+
+          if (nameCell && creditsCell) {
+            courses.push({
+              name: nameCell.value,
+              credits: parseInt(creditsCell.value) || 0,
+            });
+          }
+        }
+
+        if (courses.length === 0) {
+          alert("Please add at least one course before saving a preset");
+          return;
+        }
+
+        // Create a unique key
+        const presetKey = "custom_" + Date.now();
+
+        // Save the preset
+        customPresets[presetKey] = {
+          name: presetName,
+          courses: courses,
+        };
+
+        // Save to localStorage
+        localStorage.setItem(
+          "sgpaCustomPresets",
+          JSON.stringify(customPresets),
+        );
+
+        // Update dropdown
+        updateCustomPresetDropdown();
+
+        // Reset input field
+        document.getElementById("customPresetName").value = "";
+
+        alert("Preset saved successfully!");
+      }
+
+      // Add a new course row
+      function addCourseRow(name = "", credits = "") {
+        const coursesBody = document.getElementById("coursesBody");
+        const newRow = coursesBody.insertRow();
+
+        // Course name cell
+        const nameCell = newRow.insertCell();
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.value = name;
+        nameInput.style.width = "100%";
+        nameCell.appendChild(nameInput);
+
+        // Credits cell
+        const creditsCell = newRow.insertCell();
+        const creditsInput = document.createElement("input");
+        creditsInput.type = "number";
+        creditsInput.min = "1";
+        creditsInput.value = credits;
+        creditsInput.style.width = "50px";
+        creditsCell.appendChild(creditsInput);
+
+        // Grade cell
+        const gradeCell = newRow.insertCell();
+        const gradeSelect = document.createElement("select");
+        const grades = [
+          { value: 10, text: "O" },
+          { value: 9.5, text: "A+" },
+          { value: 9, text: "A" },
+          { value: 8, text: "B+" },
+          { value: 7, text: "B" },
+          { value: 6, text: "C" },
+          { value: 5, text: "P" },
+          { value: 0, text: "F" },
+        ];
+
+        grades.forEach((grade) => {
+          const option = document.createElement("option");
+          option.value = grade.value;
+          option.text = grade.text;
+          gradeSelect.appendChild(option);
+        });
+
+        gradeCell.appendChild(gradeSelect);
+
+        // Action cell
+        const actionCell = newRow.insertCell();
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.onclick = function () {
+          coursesBody.removeChild(newRow);
+        };
+        removeButton.style.padding = "4px 8px";
+        actionCell.appendChild(removeButton);
+      }
+
+      // Add a new course
+      function addCourse() {
+        addCourseRow();
+      }
+
+      // Calculate SGPA
       function calculateSGPA() {
-        // Credits array matching the courses in the same order
-        const credits = [1, 4, 4, 5, 3, 1, 4];
+        const rows = document.getElementById("coursesBody").rows;
         let totalCredits = 0;
         let totalPoints = 0;
 
-        // Loop through each course
-        for (let i = 0; i < credits.length; i++) {
-          const gradeSelect = document.getElementById("grade" + (i + 1));
-          console.log(gradeSelect);
-          const gradeValue = parseFloat(gradeSelect.value); // e.g., 10, 9.5, etc.
+        for (let i = 0; i < rows.length; i++) {
+          const creditsInput = rows[i].cells[1].querySelector("input");
+          const gradeSelect = rows[i].cells[2].querySelector("select");
 
-          totalPoints += gradeValue * credits[i];
-          totalCredits += credits[i];
+          if (creditsInput && gradeSelect) {
+            const credits = parseInt(creditsInput.value) || 0;
+            const gradeValue = parseFloat(gradeSelect.value);
+
+            totalPoints += gradeValue * credits;
+            totalCredits += credits;
+          }
+        }
+
+        if (totalCredits === 0) {
+          alert("Please add courses with valid credits");
+          return;
         }
 
         // Compute SGPA = total (grade points * credits) / total credits
         const sgpa = totalPoints / totalCredits;
         document.getElementById("result").textContent = sgpa.toFixed(2);
       }
+
+      // Initialize on page load
+      window.onload = function () {
+        initCustomPresets();
+
+        // Load CSE S3 as default
+        document.getElementById("presetSelect").value = "cse_s3";
+        loadPreset();
+      };
     </script>
   </body>
 </html>
